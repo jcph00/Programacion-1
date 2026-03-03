@@ -1,4 +1,4 @@
-# 📚 Mis Proyectos de Programación 1 (POO)
+# 📚 Proyectos de Programación 1 (POO)
 **Estudiante:** Juan Carlos Polania Hincapie  
 **Repositorio de prácticas y entregas del semestre.**
 
