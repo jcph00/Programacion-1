@@ -1,4 +1,4 @@
-package Programacion_1_POO.Utilidades;
+
 
 /*
  * Program: ReutilizacionCodigo its a program that contains reusable code for other programs.
@@ -73,4 +73,3 @@ public class Reutilizacion {
     }
     
 }
-

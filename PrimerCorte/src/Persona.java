@@ -1,4 +1,3 @@
-package Programacion_1_POO.Primer_Corte;
 
 public class Persona {
     // 1. Atributos PRIVADOS (Nadie los toca desde afuera directamente)

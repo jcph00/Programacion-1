@@ -1,6 +1,12 @@
-package Programacion_1_POO.Primer_Corte;
- 
-import Programacion_1_POO.Utilidades.Reutilizacion;
+
+/**
+ * PROGRAM: This program interacts with the user and allows them to manage an array of integers.
+ * @author Juan Carlos Polania Hincapie
+ * @version 1.0
+ * Date: February 11/2026
+ * License: GNU-GPL v3
+ */
+
 
 public class EjercicioArreglos {
     public static void main(String[]args){

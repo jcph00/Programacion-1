@@ -1,4 +1,3 @@
-package Programacion_1_POO.Primer_Corte;
 
 import javax.swing.JOptionPane;
 

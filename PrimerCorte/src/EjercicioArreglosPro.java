@@ -1,6 +1,3 @@
-package Programacion_1_POO.Primer_Corte;
-
-import Programacion_1_POO.Utilidades.Reutilizacion;
 
 public class EjercicioArreglosPro {
 
