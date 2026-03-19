@@ -10,6 +10,7 @@
 | :---- | :------- | :---------- | :--- |
 | **1°** | **Gestión de Notas** | Manejo de arreglos decimales, validación de errores y Javadoc. | [Ver Código](./PrimerCorte/src/Arreglos.java) |
 | **2°** | **Taller de Bicicletas** | POO Avanzada: Relaciones entre clases, composición de objetos y lógica de facturación | [Ver Código](./TallerBicicletas/src/taller) |
+| **3°** | **Codigo Empresa** |  Uso de LocalTime para control de horarios y filtrado de empleados mediante listas dinámicas  | [Ver Código](./SegundoCorte/src/EntregaEmpresa) |
 
 ---
 
