@@ -78,5 +78,4 @@ public class Animal {
     public String comer() {
         return "El animal está comiendo.";
     }
-
 }

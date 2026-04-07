@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
-public class Banco {
+public class Banco {    
     private String nombre;
     private String direccion;
     private List<Cuenta> cuentas;
@@ -43,6 +44,12 @@ public class Banco {
             }
         }
         return clienteEncontrado;
+    }
+
+    public Optional<Cliente> buscarClienteOptional(String identificacion) {
+        return listaClientes.stream()
+                .filter(cliente -> cliente.cedula().equals(identificacion))
+                .findFirst();
     }
 
     public void retirarDinero(String identificacion, double valorRetiro) {
