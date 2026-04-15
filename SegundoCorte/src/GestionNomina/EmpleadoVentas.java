@@ -4,8 +4,9 @@ public class EmpleadoVentas extends Empleado {
     private float totalVentas;
     private float porcentajeComision;
 
-    public EmpleadoVentas(String nombre, String doucumento, int edad, float salarioBase, CategoriaEmpleado categoria, float totalVentas, float porcentajeComision) {
-        super(nombre, doucumento, edad, salarioBase, categoria);
+    public EmpleadoVentas(String nombre, String documento, int edad, float salarioBase, CategoriaEmpleado categoria, float totalVentas, float porcentajeComision, float descuentoSalud, float descuentoPension) {
+        super(nombre, documento, edad, salarioBase, categoria, descuentoSalud, descuentoPension);
+        validarVentas(totalVentas, porcentajeComision);
         this.totalVentas = totalVentas;
         this.porcentajeComision = porcentajeComision;
     }
@@ -23,19 +24,24 @@ public class EmpleadoVentas extends Empleado {
     }
 
     public void setPorcentajeComision(float porcentajeComision) {
-        if (porcentajeComision < 0 || porcentajeComision > 100) {
-            throw new IllegalArgumentException("El porcentaje de comisión debe estar entre 0 y 100.");
-        }
         this.porcentajeComision = porcentajeComision;
     }
 
-    public float calcularSalarioBruto() {
-        return super.calcularSalarioBruto() + (totalVentas * porcentajeComision/100); // Salario base más bonificación de categoría y comisión por ventas
+    private void validarVentas(float ventas, float comision) {
+        if (ventas < 0) throw new IllegalArgumentException("Las ventas no pueden ser negativas.");
+        if (comision < 0 || comision > 100) throw new IllegalArgumentException("Comisión inválida.");
     }
 
     @Override
-    public String toString() {
-        return "EmpleadoVentas [totalVentas=" + totalVentas + ", porcentajeComision=" + porcentajeComision + "]";
+    public float calcularSalarioBruto() {
+        return salarioBase + (totalVentas * (porcentajeComision / 100)); // Salario base más comisión por ventas
     }
+    public String toString() {
+    return super.toString() + String.format(
+        "\nVentas Mes:  $%,.2f\n" +
+        "Comisión:    %.1f%%", 
+        totalVentas, porcentajeComision
+    );
+}
     
 }

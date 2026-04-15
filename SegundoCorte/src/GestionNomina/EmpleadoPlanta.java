@@ -6,8 +6,9 @@ public class EmpleadoPlanta extends Empleado {
     private float valorHoraExtra;
     private float auxilioTransporte;
 
-    public EmpleadoPlanta(String nombre, String doucumento, int edad, float salarioBase, String cargo, CategoriaEmpleado categoria, int horasExtras, float valorHoraExtra, float auxilioTransporte) {
-        super(nombre, doucumento, edad, salarioBase, categoria);
+    public EmpleadoPlanta(String nombre, String documento, int edad, float salarioBase, String cargo, CategoriaEmpleado categoria, int horasExtras, float valorHoraExtra, float auxilioTransporte, float descuentoSalud, float descuentoPension) {
+        super(nombre, documento, edad, salarioBase, categoria, descuentoSalud, descuentoPension);
+        validarDatosPlanta(horasExtras, valorHoraExtra, auxilioTransporte);
         this.cargo = cargo;
         this.horasExtras = horasExtras;
         this.valorHoraExtra = valorHoraExtra;
@@ -35,16 +36,10 @@ public class EmpleadoPlanta extends Empleado {
     }
 
     public void setHorasExtras(int horasExtras) {
-        if (horasExtras < 0) {
-            throw new IllegalArgumentException("Las horas extras no pueden ser negativas.");
-        }
         this.horasExtras = horasExtras;
     }
 
     public void setValorHoraExtra(float valorHoraExtra) {
-        if (valorHoraExtra < 0) {
-            throw new IllegalArgumentException("El valor de la hora extra no puede ser negativo.");
-        }
         this.valorHoraExtra = valorHoraExtra;
     }
 
@@ -52,14 +47,24 @@ public class EmpleadoPlanta extends Empleado {
         this.auxilioTransporte = auxilioTransporte;
     }
 
-    public float calcularSalarioBruto() {
-        return super.calcularSalarioBruto() + (horasExtras * valorHoraExtra) + auxilioTransporte; // Salario base más bonificación de categoría, horas extras y auxilio de transporte
+    private void validarDatosPlanta(int horasExtras, float valorHoraExtra, float auxilioTransporte) {
+        if (horasExtras < 0) throw new IllegalArgumentException("Las horas extras no pueden ser negativas.");
+        if (valorHoraExtra < 0) throw new IllegalArgumentException("El valor de la hora extra no puede ser negativo.");
+        if (auxilioTransporte < 0) throw new IllegalArgumentException("El auxilio de transporte no puede ser negativo.");
     }
 
     @Override
-    public String toString() {
-        return "EmpleadoPlanta [cargo=" + cargo + ", horasExtras=" + horasExtras + ", valorHoraExtra=" + valorHoraExtra
-                + ", auxilioTransporte=" + auxilioTransporte + "]";
+    public float calcularSalarioBruto() {
+        return salarioBase + (horasExtras * valorHoraExtra) + auxilioTransporte;
     }
+
+    public String toString() {
+    return super.toString() + String.format(
+        "\nCargo:       %s\n" +
+        "Horas Extra: %d\n" +
+        "Auxilio Trp: $%,.2f", 
+        cargo, horasExtras, auxilioTransporte
+    );
+}
     
 }

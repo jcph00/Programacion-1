@@ -1,22 +1,23 @@
 package GestionNomina;
 
 public abstract class Empleado {
-    private String nombre;
-    private String doucumento;
-    private int edad;
-    private float salarioBase;
-    private CategoriaEmpleado categoria;
-    private float descuentoSalud;
-    private float descuentoPension;
+    protected String nombre;
+    protected String documento;
+    protected int edad;
+    protected float salarioBase;
+    protected CategoriaEmpleado categoria;
+    protected float descuentoSalud;
+    protected float descuentoPension;
 
-    public Empleado(String nombre, String doucumento, int edad, float salarioBase, CategoriaEmpleado categoria) {
+    public Empleado(String nombre, String documento, int edad, float salarioBase, CategoriaEmpleado categoria, float descuentoSalud, float descuentoPension) {
+        validarDatosBase(salarioBase, descuentoSalud, descuentoPension, edad);
         this.nombre = nombre;
-        this.doucumento = doucumento;
+        this.documento = documento;
         this.edad = edad;
         this.salarioBase = salarioBase;
         this.categoria = categoria;
-        this.descuentoSalud = calcularDescuentoSalud();
-        this.descuentoPension = calcularDescuentoPension();
+        this.descuentoSalud = descuentoSalud;
+        this.descuentoPension = descuentoPension;
     }
     
 
@@ -30,13 +31,13 @@ public abstract class Empleado {
     }
 
 
-    public String getDoucumento() {
-        return doucumento;
+    public String getDocumento() {
+        return documento;
     }
 
 
-    public void setDoucumento(String doucumento) {
-        this.doucumento = doucumento;
+    public void setDocumento(String documento) {
+        this.documento = documento;
     }
 
 
@@ -76,9 +77,6 @@ public abstract class Empleado {
 
 
     public void setDescuentoSalud(float descuentoSalud) {
-        if (descuentoSalud < 0 || descuentoSalud > 100) {
-            throw new IllegalArgumentException("El descuento de salud debe estar entre 0 y 100.");
-        }
         this.descuentoSalud = descuentoSalud;
     }
 
@@ -89,45 +87,80 @@ public abstract class Empleado {
 
 
     public void setDescuentoPension(float descuentoPension) {
-        if (descuentoPension < 0 || descuentoPension > 100) {
-            throw new IllegalArgumentException("El descuento de pensión debe estar entre 0 y 100.");
-        }
         this.descuentoPension = descuentoPension;
     }
 
+    // --- MÉTODOS DE CÁLCULO ---
 
-    private float calcularDescuentoSalud() {
-        return salarioBase;
+    public abstract float calcularSalarioBruto();
+
+    public float calcularBonificacionCategoria() {
+        return salarioBase * categoria.getValorAdicional();
     }
 
-    private float calcularDescuentoPension() {
-        return salarioBase;
+    public float calcularDescuentos() {
+        return (calcularSalarioBruto() * (this.descuentoSalud / 100)) + (calcularSalarioBruto() * (this.descuentoPension / 100));
+         
     }
 
-    private float calcularBonificacionCategoria() {
-        return salarioBase * (categoria.getValorAdicional()); // Bonificación según la categoría del empleado
-    }
-
-    private float calcularSalarioNeto() {
-        return calcularSalarioBruto() - descuentoSalud - descuentoPension;
+    public float calcularSalarioNeto() {
+        return calcularSalarioBruto() - calcularDescuentos() + calcularBonificacionCategoria();
     }
     
-    protected float calcularSalarioBruto() {
-        return salarioBase + calcularBonificacionCategoria(); // Salario base más bonificación de categoría
+
+    public ResumenPago generarResumenPago() {
+    return new ResumenPago(
+        this.documento,
+        this.nombre,
+        this.getClass().getSimpleName(), // Esto obtiene el nombre de la clase (Planta, Ventas, etc.)
+        this.calcularSalarioBruto(),
+        this.calcularDescuentos(),
+        this.calcularSalarioNeto()
+    );
     }
 
-    private void mostrarInformacion() {
-        System.out.println(String.format("Nombre: %s\nDocumento: %s\nEdad: %d\nSalario Base: %.2f\nCategoría: %s\nDescuento Salud: %.2f\nDescuento Pensión: %.2f\nSalario Neto: %.2f",
-                nombre, doucumento, edad, salarioBase, categoria.name(), descuentoSalud, descuentoPension, calcularSalarioNeto()));
+    public void mostrarInformacion() {
+    System.out.println("\n--- DETALLES DEL EMPLEADO ---");
+    System.out.printf("Nombre:      %s%n", nombre);
+    System.out.printf("Documento:   %s%n", documento);
+    System.out.printf("Categoría:   %s%n", categoria);
+    System.out.printf("Salario Base: $%,.2f%n", salarioBase);
+    
+    // Aquí mostramos los resultados de los cálculos polimórficos
+    System.out.printf("Salario Bruto: $%,.2f%n", calcularSalarioBruto());
+    System.out.printf("Bonificación:  $%,.2f%n", calcularBonificacionCategoria());
+    System.out.printf("Descuentos:    $%,.2f%n", calcularDescuentos());
+    System.out.println("-----------------------------");
+    System.out.printf("SALARIO NETO:  $%,.2f%n", calcularSalarioNeto());
+    System.out.println("-----------------------------\n");
     }
+
+    private void validarDatosBase(float salario, float salud, float pension, int edad) {
+        if (salario < 0) {
+            throw new IllegalArgumentException("El salario base no puede ser negativo.");
+        }
+        if (salud < 0 || salud > 100 || pension < 0 || pension > 100) {
+            throw new IllegalArgumentException("Los porcentajes de salud/pensión deben estar entre 0 y 100.");
+        }
+        if (edad < 18) {
+            throw new IllegalArgumentException("El empleado debe ser mayor de edad.");
+        }        
+    }
+
 
 
     @Override
     public String toString() {
-        return "Empleado [nombre=" + nombre + ", doucumento=" + doucumento + ", edad=" + edad + ", salarioBase="
-                + salarioBase + ", categoria=" + categoria + ", descuentoSalud=" + descuentoSalud
-                + ", descuentoPension=" + descuentoPension + "]";
-    }
-
-    
+    return String.format(
+        "DETALLES DEL EMPLEADO\n" +
+        "--------------------------\n" +
+        "Nombre:      %s\n" +
+        "Documento:   %s\n" +
+        "Edad:        %d años\n" +
+        "Categoría:   %s\n" +
+        "Salario Base: $%,.2f\n" +
+        "Salario Neto: $%,.2f", 
+        nombre, documento, edad, categoria, salarioBase, calcularSalarioNeto()
+    );
+} 
 }
